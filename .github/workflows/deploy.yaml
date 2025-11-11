@@ -1,28 +1,29 @@
-name: Pi - basic deploy
-
+name: Build & Push from Pi
 on:
   push:
-    branches: [ main ]    # run whenever you push to main
+    branches: [main]
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
-  deploy:
-    # Use the labels your runner shows in Settings → Actions → Runners.
-    # At minimum keep "self-hosted". Add others if you set them.
-    runs-on: [ self-hosted ]  # e.g., [self-hosted, Linux, ARM64, pi]
-
+  build:
+    runs-on: [self-hosted, pi]   # your runner’s labels
     steps:
-      - name: Check out code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Show where we are (debug)
-        run: |
-          hostname
-          uname -a
-          echo "Workspace: $GITHUB_WORKSPACE"
-          ls -la
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Simple: sync repo into your app dir (make sure it exists & is owned by the runner user)
-      - name: Sync to /opt/myapp
-        run: |
-          mkdir -p /opt/myapp
-          rsync -az --delete --exclude '.git' "$GITHUB_WORKSPACE/" /opt/myapp/
+      - name: Build & push (native ARM64)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.repository }}:latest
