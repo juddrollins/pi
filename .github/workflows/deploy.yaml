@@ -27,3 +27,17 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ghcr.io/${{ github.repository }}:latest
+          platforms: linux/arm64
+
+      - name: Stop and remove old container
+        run: |
+          docker stop pi-app || true
+          docker rm pi-app || true
+
+      - name: Pull and run new container
+        run: |
+          docker pull ghcr.io/${{ github.repository }}:latest
+          docker run -d \
+            --name pi-app \
+            --restart unless-stopped \
+            ghcr.io/${{ github.repository }}:latest
