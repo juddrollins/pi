@@ -1,0 +1,28 @@
+{
+  "name": "raspberry-pi-api-server",
+  "version": "1.0.0",
+  "description": "A RESTful API service for monitoring and managing a Raspberry Pi device",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "keywords": [
+    "raspberry-pi",
+    "api",
+    "express",
+    "monitoring",
+    "rest"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "systeminformation": "^5.21.20"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}
+

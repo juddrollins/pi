@@ -40,4 +40,12 @@ jobs:
           docker run -d \
             --name pi-app \
             --restart unless-stopped \
+            -p 8080:8080 \
+            -v pi-app-data:/app/data \
             ghcr.io/${{ github.repository }}:latest
+      
+      - name: Verify deployment
+        run: |
+          sleep 5
+          docker ps | grep pi-app
+          docker logs --tail 20 pi-app
