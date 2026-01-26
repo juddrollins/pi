@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: [self-hosted, pi]   # your runner’s labels
+    runs-on: [self-hosted]   # your runner’s labels
     steps:
       - uses: actions/checkout@v4
 
